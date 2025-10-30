@@ -1,0 +1,328 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+
+% Configuración de márgenes
+\geometry{a4paper, margin=2.5cm}
+
+% Configuración para el código Python
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Python,
+    frame=single
+}
+
+\lstset{style=pythonstyle}
+
+\title{Sistema Basado en Reglas para Diagnóstico de Vehículos}
+\author{Rubén Jiménez}
+\date{Octubre 2025}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introducción}
+
+Los sistemas basados en reglas son un tipo de sistema experto que utiliza un conjunto de reglas condicionales (IF-THEN) para tomar decisiones o realizar diagnósticos. En este documento se presenta un sistema de diagnóstico de problemas en vehículos implementado en Python.
+
+\subsection{Objetivos}
+\begin{itemize}
+    \item Diseñar un sistema basado en reglas para diagnóstico automotriz
+    \item Implementar el sistema en Python utilizando estructuras condicionales
+    \item Proporcionar diagnósticos precisos basados en síntomas reportados
+\end{itemize}
+
+\section{Enunciado del Ejercicio}
+
+\textbf{ACTIVIDAD 4.- Diseña tu propio Sistema basado en reglas y prográmalo en Python.}
+
+\begin{enumerate}
+    \item Escoge o diseña un sistema basado en reglas
+    \item Prográmalo en Python de tal forma que la respuesta sea la esperada
+\end{enumerate}
+
+\subsection{Sistema Seleccionado}
+Se ha diseñado un sistema de diagnóstico de problemas en vehículos que, mediante una serie de preguntas al usuario, identifica posibles fallas y proporciona recomendaciones de reparación.
+
+\section{Diseño del Sistema}
+
+\subsection{Reglas del Sistema}
+
+El sistema implementa las siguientes reglas principales:
+
+\begin{enumerate}
+    \item \textbf{SI} el vehículo enciende \textbf{Y} hace ruidos \textbf{ENTONCES} diagnosticar según ubicación del ruido
+    \begin{itemize}
+        \item Motor: Problema en el motor (correa, aceite, distribución)
+        \item Frenos: Problema en frenos (pastillas, discos) - URGENTE
+        \item Suspensión: Problema en suspensión (amortiguadores)
+    \end{itemize}
+    
+    \item \textbf{SI} el vehículo enciende \textbf{Y} no hace ruidos \textbf{ENTONCES} evaluar rendimiento
+    \begin{itemize}
+        \item Alto consumo: Filtros, inyectores, neumáticos
+        \item Pérdida de potencia: Bujías, sensores, filtros
+        \item Humo: Aceite, pistones, compresión
+    \end{itemize}
+    
+    \item \textbf{SI} el vehículo no enciende \textbf{Y} hace sonido \textbf{ENTONCES} problema eléctrico o combustible
+    \begin{itemize}
+        \item Sonido "clic": Batería descargada
+        \item Motor intenta arrancar: Problema de combustible o chispa
+    \end{itemize}
+    
+    \item \textbf{SI} el vehículo no enciende \textbf{Y} no hace sonido \textbf{ENTONCES} batería o sistema eléctrico
+    \begin{itemize}
+        \item Luces del tablero SI encienden: Motor de arranque dañado
+        \item Luces del tablero NO encienden: Batería completamente descargada
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Diagrama de Flujo Textual}
+
+\begin{verbatim}
+¿El vehículo ENCIENDE?
+│
+├─ SÍ → ¿Hace RUIDOS extraños?
+│       ├─ SÍ → ¿Dónde? (motor/frenos/suspensión)
+│       │       ├─ Motor → Problema en motor
+│       │       ├─ Frenos → Problema en frenos (URGENTE)
+│       │       └─ Suspensión → Problema en suspensión
+│       │
+│       └─ NO → ¿Problemas de RENDIMIENTO?
+│               ├─ SÍ → ¿Qué problema? (consumo/potencia/humo)
+│               └─ NO → Vehículo en buen estado
+│
+└─ NO → ¿Hace SONIDO al girar llave?
+        ├─ SÍ → ¿Qué tipo? (clic/arranque)
+        │       ├─ Clic → Batería descargada
+        │       └─ Arranque → Problema combustible/chispa
+        │
+        └─ NO → ¿Luces del tablero encienden?
+                ├─ SÍ → Motor de arranque dañado
+                └─ NO → Batería muerta/desconectada
+\end{verbatim}
+
+\newpage
+
+\section{Implementación en Python}
+
+\subsection{Código Completo}
+
+\begin{lstlisting}[caption={Sistema de Diagnóstico de Vehículos}]
+# Sistema basado en reglas para diagnostico de vehiculos
+
+print("=== SISTEMA DE DIAGNOSTICO DE VEHICULOS ===\n")
+print("Bienvenido al sistema de diagnostico automotriz")
+print("Responda las preguntas para identificar el problema\n")
+
+# Primera pregunta: El vehiculo enciende?
+print("El vehiculo enciende? (si/no)")
+enciende = input().lower()
+
+if enciende == "si":
+    # Segunda pregunta: Hace ruidos extraños?
+    print("El vehiculo hace ruidos extraños? (si/no)")
+    ruidos = input().lower()
+    
+    if ruidos == "si":
+        # Tercera pregunta: Donde se escucha el ruido?
+        print("Donde se escucha el ruido? (motor/frenos/suspension)")
+        ubicacion = input().lower()
+        
+        if ubicacion == "motor":
+            print("\nDIAGNOSTICO: Problema en el MOTOR")
+            print("   - Posibles causas: correa desgastada, falta de aceite")
+            print("   - Recomendacion: Revisar nivel de aceite y llevar a mecanico")
+        elif ubicacion == "frenos":
+            print("\nDIAGNOSTICO: Problema en los FRENOS")
+            print("   - Posibles causas: pastillas gastadas, discos desgastados")
+            print("   - Recomendacion: URGENTE! Revisar sistema de frenos inmediatamente")
+        elif ubicacion == "suspension":
+            print("\nDIAGNOSTICO: Problema en la SUSPENSION")
+            print("   - Posibles causas: amortiguadores dañados, barra estabilizadora")
+            print("   - Recomendacion: Revisar amortiguadores y tren delantero")
+        else:
+            print("\nDIAGNOSTICO: Revisar otras areas del vehiculo")
+    
+    else:
+        # No hace ruidos
+        print("Tiene problemas de rendimiento? (si/no)")
+        rendimiento = input().lower()
+        
+        if rendimiento == "si":
+            print("Que problema presenta? (consumo/potencia/humo)")
+            problema = input().lower()
+            
+            if problema == "consumo":
+                print("\nDIAGNOSTICO: ALTO CONSUMO de combustible")
+                print("   - Posibles causas: filtro de aire sucio, inyectores, presion de neumaticos")
+                print("   - Recomendacion: Revisar filtros y sistema de inyeccion")
+            elif problema == "potencia":
+                print("\nDIAGNOSTICO: PERDIDA DE POTENCIA")
+                print("   - Posibles causas: filtros sucios, bujias, sensor MAF")
+                print("   - Recomendacion: Hacer mantenimiento general y diagnostico electronico")
+            elif problema == "humo":
+                print("\nDIAGNOSTICO: Emision de HUMO anormal")
+                print("   - Posibles causas: aceite quemandose, problemas en pistones")
+                print("   - Recomendacion: Revisar nivel de aceite y compresion del motor")
+            else:
+                print("\nDIAGNOSTICO: Requiere revision detallada")
+        else:
+            print("\nDIAGNOSTICO: El vehiculo esta en BUEN ESTADO")
+            print("   - Recomendacion: Continuar con mantenimiento preventivo regular")
+
+else:
+    # El vehiculo NO enciende
+    print("Hace algun sonido al girar la llave? (si/no)")
+    sonido = input().lower()
+    
+    if sonido == "si":
+        print("Que tipo de sonido hace? (clic/arranque/nada)")
+        tipo_sonido = input().lower()
+        
+        if tipo_sonido == "clic":
+            print("\nDIAGNOSTICO: Problema de BATERIA")
+            print("   - Posibles causas: bateria descargada o dañada")
+            print("   - Recomendacion: Cargar o reemplazar la bateria")
+        elif tipo_sonido == "arranque":
+            print("\nDIAGNOSTICO: Problema de COMBUSTIBLE o CHISPA")
+            print("   - Posibles causas: falta de gasolina, bomba de combustible, bujias")
+            print("   - Recomendacion: Verificar nivel de combustible y sistema de encendido")
+        else:
+            print("\nDIAGNOSTICO: Problema ELECTRICO severo")
+            print("   - Recomendacion: Revisar fusibles y sistema electrico completo")
+    else:
+        print("Las luces del tablero encienden? (si/no)")
+        luces = input().lower()
+        
+        if luces == "si":
+            print("\nDIAGNOSTICO: Problema en el MOTOR DE ARRANQUE")
+            print("   - Posibles causas: motor de arranque dañado, relay defectuoso")
+            print("   - Recomendacion: Revisar motor de arranque y conexiones")
+        else:
+            print("\nDIAGNOSTICO: BATERIA COMPLETAMENTE DESCARGADA o desconectada")
+            print("   - Posibles causas: bateria muerta, terminales flojos/corroidos")
+            print("   - Recomendacion: Revisar conexiones de bateria y estado de carga")
+
+print("\n" + "="*50)
+print("Gracias por usar el sistema de diagnostico!")
+print("Recuerde: Este es un diagnostico preliminar.")
+print("Siempre consulte con un mecanico profesional.")
+print("="*50)
+\end{lstlisting}
+
+\newpage
+
+\section{Ejemplos de Ejecución}
+
+\subsection{Caso 1: Batería Descargada}
+
+Entrada del usuario:
+\begin{verbatim}
+El vehiculo enciende? no
+Hace algun sonido al girar la llave? si
+Que tipo de sonido hace? clic
+\end{verbatim}
+
+Salida del sistema:
+\begin{verbatim}
+DIAGNOSTICO: Problema de BATERIA
+   - Posibles causas: bateria descargada o dañada
+   - Recomendacion: Cargar o reemplazar la bateria
+\end{verbatim}
+
+\subsection{Caso 2: Problema en Frenos}
+
+Entrada del usuario:
+\begin{verbatim}
+El vehiculo enciende? si
+El vehiculo hace ruidos extraños? si
+Donde se escucha el ruido? frenos
+\end{verbatim}
+
+Salida del sistema:
+\begin{verbatim}
+DIAGNOSTICO: Problema en los FRENOS
+   - Posibles causas: pastillas gastadas, discos desgastados
+   - Recomendacion: URGENTE! Revisar sistema de frenos inmediatamente
+\end{verbatim}
+
+\subsection{Caso 3: Alto Consumo de Combustible}
+
+Entrada del usuario:
+\begin{verbatim}
+El vehiculo enciende? si
+El vehiculo hace ruidos extraños? no
+Tiene problemas de rendimiento? si
+Que problema presenta? consumo
+\end{verbatim}
+
+Salida del sistema:
+\begin{verbatim}
+DIAGNOSTICO: ALTO CONSUMO de combustible
+   - Posibles causas: filtro de aire sucio, inyectores, presion de neumaticos
+   - Recomendacion: Revisar filtros y sistema de inyeccion
+\end{verbatim}
+
+\section{Análisis del Sistema}
+
+\subsection{Ventajas}
+\begin{itemize}
+    \item \textbf{Facilidad de uso:} El sistema guía al usuario mediante preguntas simples
+    \item \textbf{Diagnóstico estructurado:} Sigue un árbol de decisión lógico
+    \item \textbf{Recomendaciones claras:} Proporciona acciones específicas a tomar
+    \item \textbf{Escalabilidad:} Fácil de expandir con más reglas y diagnósticos
+\end{itemize}
+
+
+\section{Conclusiones}
+
+El sistema de diagnóstico implementado demuestra la efectividad de los sistemas basados en reglas para:
+
+\begin{itemize}
+    \item Realizar diagnósticos sistemáticos mediante preguntas guiadas
+    \item Proporcionar recomendaciones específicas según los síntomas
+    \item Facilitar la identificación de problemas comunes en vehículos
+    \item Aplicar lógica condicional de manera estructurada
+\end{itemize}
+
+El sistema puede expandirse agregando más reglas y casos específicos para mejorar la precisión del diagnóstico. Además, podría integrarse con bases de datos de problemas conocidos o sistemas de aprendizaje automático para mejorar sus capacidades.
+
+
+\section{Referencias}
+
+\begin{itemize}
+    \item Russell, S., \& Norvig, P. (2020). \textit{Artificial Intelligence: A Modern Approach}. Pearson.
+    \item Documentación oficial de Python 3: \texttt{https://docs.python.org/3/}
+    \item Giarratano, J., \& Riley, G. (2004). \textit{Expert Systems: Principles and Programming}. PWS Publishing.
+\end{itemize}
+
+\end{document}
